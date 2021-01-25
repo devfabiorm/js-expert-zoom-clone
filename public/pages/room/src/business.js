@@ -6,6 +6,7 @@ class Business {
 
     this.socketBuilder = socketBuilder
       .setOnUserConnected(this.onUserConnected())
+      .setOnUserDisconnected(this.onUserDisconnected())
       .build();
     this.socketBuilder.emit('join-room', this.room, 'teste01');
     this.currentStream = {};
@@ -34,6 +35,12 @@ class Business {
   onUserConnected = function() {
     return userId => {
       console.log('user connected', userId);
+    }
+  }
+
+  onUserDisconnected = function() {
+    return userId => {
+      console.log('user disconnected', userId);
     }
   }
 }
