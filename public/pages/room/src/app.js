@@ -27,7 +27,7 @@ const onload = () => {
     }
   });
 
-  const peerBuilder = new PeerBuilder(peerConfig);
+  const peerBuilder = new PeerBuilder({ peerConfig });
 
   const view = new View();
   const media = new Media();
@@ -35,7 +35,8 @@ const onload = () => {
     view,
     media,
     room,
-    socketBuilder
+    socketBuilder,
+    peerBuilder
   }
 
   Business.initialize(deps);

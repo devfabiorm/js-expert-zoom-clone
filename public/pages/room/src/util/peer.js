@@ -36,7 +36,7 @@ class PeerBuilder {
   _prepareCallEvent(call) {
     call.on('stream', stream => this.onPeerStreamReceived(call, stream));
 
-    this.setOnCallReceived(call);
+    this.onCallReceived(call);
   }
 
   build() {
@@ -46,6 +46,7 @@ class PeerBuilder {
     peer.on('call', this._prepareCallEvent.bind(this));
 
     return new Promise(resolve => peer.on('open', id => {
+      
       this.onConnectionOpened(peer);
       return resolve(peer);
     }))
