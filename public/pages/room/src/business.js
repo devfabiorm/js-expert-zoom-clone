@@ -32,6 +32,7 @@ class Business {
       .setOnConnectionOpened(this.onPeerConnectionOpened())
       .setOnCallReceived(this.onPeerCallReceived())
       .setOnPeerStreamReceived(this.onPeerStreamReceived())
+      .setOncallError(this.onPeerCallError())
       .build()
 
     this.addVideoStream('teste01');
@@ -47,26 +48,26 @@ class Business {
     });
   }
 
-  onUserConnected = function() {
+  onUserConnected() {
     return userId => {
       console.log('user connected', userId);
       this.currentPeer.call(userId, this.currentStream);
     }
   }
 
-  onUserDisconnected = function() {
+  onUserDisconnected() {
     return userId => {
       console.log('user disconnected', userId);
     }
   }
 
-  onPeerError = function() {
+  onPeerError() {
     return error => {
       console.error('error on peer', error);
     }
   }
 
-  onPeerConnectionOpened = function() {
+  onPeerConnectionOpened() {
     return (peer) => {
       const id = peer.id;
       console.log('peer!!', peer);
@@ -74,19 +75,26 @@ class Business {
     }
   }
 
-  onPeerCallReceived = function() {
+  onPeerCallReceived() {
     return call => {
       console.log('answering call', call);
       call.answer(this.currentStream);
     }
   }
 
-  onPeerStreamReceived = function() {
+  onPeerStreamReceived() {
     return (call, stream) => {
       const callerId = call.peer;
       this.addVideoStream(callerId, stream);
       this.peers.set(callerId, { call });
       this.view.setParticipants(this.peers.size);
+    }
+  }
+
+  onPeerCallError() {
+    return (call, error) => {
+      console.log('an call error  ocuured!', error);
+      this.view.removeVideoElement(call.peer);
     }
   }
 }
