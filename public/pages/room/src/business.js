@@ -73,6 +73,8 @@ class Business {
         this.peers.delete(userId);
       }
       this.view.setParticipants(this.peers.size);
+      this.stopRecording(userId);
+      
       this.view.removeVideoElement(userId);
     }
   }
@@ -146,6 +148,15 @@ class Business {
       if(!isRecordingActive) continue;
 
       await rec.stopRecording();
+      this.playRecordings(key);
     }
+  }
+
+  playRecordings(userId) {
+    const user = this.usersRecordings.get(userId);
+    const videosURLs = user.getAllVideoURLs();
+    videosURLs.map(url => {
+      this.view.renderVideo({ url, userId });
+    });
   }
 }
